@@ -7,28 +7,56 @@ Created on Mon Mar 12 21:28:50 2018
 """
 
 import json
+from enum import Enum
 
 root_directory = '/users/benjaminlucas/Documents/Math_Genealogy/'
 
-def main(root_directory):
+class MathematicianGroup(Enum):
+    fields_medalists = "fields_medalists"
+    nobel_economists = "economists"
+
+def main(root_directory, mathematician_class = MathematicianGroup.fields_medalists):
     math_dict = Load_Math_Data(root_directory)
     
-    fields_medalists = ['Lars Ahlfors', 'Jesse Douglas',
-                        'Laurent Schwartz', 'Atle Selberg', 'Kunihiko Kodaira','Jean-Pierre Serre'
-                        ,'Klaus Roth', u'René Thom',u'Lars Hörmander','John Milnor','Michael Atiyah'
-                        ,'Paul Joseph Cohen','Alexander Grothendieck','Stephen Smale','Alan Baker'
-                        ,'Heisuke Hironaka','John Griggs Thompson','Sergey Petrovich Novikov','Enrico Bombieri'
-                        ,'David Mumford','Pierre Deligne','Charles Fefferman','Daniel Quillen'
-                        ,'Gregory Aleksandrovic Margulis','Alain Connes','William Thurston','Shing-Tung Yau'
-                        ,'Simon Donaldson','Gerd Faltings','Michael Freedman','Vladimir Drinfeld'
-                        ,'Vaughan Jones','Shigefumi Mori','Edward Witten','Jean Bourgain'
-                        ,'Pierre-Louis Lions','Jean-Christophe Yoccoz','Efim Zelmanov','Richard Borcherds'
-                        ,'William Timothy Gowers','Maxim Kontsevich','Curtis McMullen','Laurent Lafforgue'
-                        ,'Vladimir Voevodsky','Andrei Okounkov','Grigorii Yakovlevich Perelman','Terence Tao'
-                        ,'Wendelin Werner','Elon Lindenstrauss',u'Bảo Châu Ngô','Stanislav Smirnov'
-                        ,u'Cédric Villani','Artur Avila','Manjul Bhargava','Martin Hairer'
-                        ,'Maryam Mirzakhani']
-
+    if(mathematician_class == MathematicianGroup.fields_medalists):
+        fields_medalists = ['Lars Ahlfors', 'Jesse Douglas',
+                            'Laurent Schwartz', 'Atle Selberg', 'Kunihiko Kodaira','Jean-Pierre Serre'
+                            ,'Klaus Roth', u'René Thom',u'Lars Hörmander','John Milnor','Michael Atiyah'
+                            ,'Paul Joseph Cohen','Alexander Grothendieck','Stephen Smale','Alan Baker'
+                            ,'Heisuke Hironaka','John Griggs Thompson','Sergey Petrovich Novikov','Enrico Bombieri'
+                            ,'David Mumford','Pierre Deligne','Charles Fefferman','Daniel Quillen'
+                            ,'Gregory Aleksandrovic Margulis','Alain Connes','William Thurston','Shing-Tung Yau'
+                            ,'Simon Donaldson','Gerd Faltings','Michael Freedman','Vladimir Drinfeld'
+                            ,'Vaughan Jones','Shigefumi Mori','Edward Witten','Jean Bourgain'
+                            ,'Pierre-Louis Lions','Jean-Christophe Yoccoz','Efim Zelmanov','Richard Borcherds'
+                            ,'William Timothy Gowers','Maxim Kontsevich','Curtis McMullen','Laurent Lafforgue'
+                            ,'Vladimir Voevodsky','Andrei Okounkov','Grigorii Yakovlevich Perelman','Terence Tao'
+                            ,'Wendelin Werner','Elon Lindenstrauss',u'Bảo Châu Ngô','Stanislav Smirnov'
+                            ,u'Cédric Villani','Artur Avila','Manjul Bhargava','Martin Hairer'
+                            ,'Maryam Mirzakhani']
+    else:
+        # Nobel Econonmists
+        fields_medalists =['Ragnar Frisch', 'Jan Tinbergen','Paul Samuelson',
+                           'Simon Kuznets','John Hicks','Kenneth Arrow','Wassily Leontief',
+                           'Friedrich Hayek','Leonid Kantorovich',
+                           'Tjalling Koopmans','Milton Friedman',
+                           'Herbert Alexander Simon','Theodore Schultz','Arthur Lewis','Lawrence Klein','James Tobin',
+                           'George Stigler', u'Gérard Debreu','Richard Stone',
+                           'Franco Modigliani','Robert Solow',
+                           'Harry Markowitz','Merton Miller','Gary Becker',
+                           'Robert Fogel', 'John Harsanyi',
+                           'John Forbes Nash, Jr.','Reinhard Selten','Robert Emerson Lucas',
+                           'James Mirrlees','William Vickrey','Robert Cox Merton',
+                           'Amartya Sen','Robert Mundell',
+                           'James Heckman','Daniel McFadden','George Akerlof','A. Michael (Andrew) Spence',
+                           'Joseph Eugene Stiglitz','Vernon Lomax Smith', 'Robert Engle',
+                           'Clive Granger','Finn Kydland','Edward Prescott','Robert Aumann',
+                           'Thomas Schelling','Edmund Phelps','Leonid Hurwicz',
+                           'Eric Maskin','Roger Myerson','Paul Krugman',
+                           'Peter Diamond','Dale Mortensen','Christopher Pissarides',
+                           'Thomas Sargent','Christopher Albert Sims','Alvin Elliot Roth','Lloyd Stowell Shapley',
+                           'Eugene Francis Fama','Lars Peter Hansen','Jean Tirole']
+            
 
     fields_medalist_entries = [FindMathematicianID(winner, math_dict) for winner in fields_medalists]
     
@@ -56,6 +84,7 @@ def main(root_directory):
     
     # Find the set of all progenitors
     ancestor_list = [FindAllAncestors([entry], math_dict) for entry in fields_medalist_entries]
+    pacioli_list = [entry['name'] for entry in fields_medalist_entries if 'Luca Pacioli' in FindAllAncestors([entry], math_dict)]
     ancestors_all = []
     for a in ancestor_list:
         ancestors_all.extend(a)
